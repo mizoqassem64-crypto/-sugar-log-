@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل قراءات السكر - أمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .form-card h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group label {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .input-group input, .input-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.4);
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .records-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .records-section h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .record-card {
+            background: #f8fdf8;
+            border: 1px solid #c8e6c9;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .record-card:hover {
+            box-shadow: 0 3px 12px rgba(46, 125, 50, 0.1);
+        }
+        .record-info {
+            flex: 1;
+        }
+        .record-date {
+            font-weight: 700;
+            color: #1b5e20;
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+        }
+        .record-readings {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .reading {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            color: #444;
+        }
+        .reading-value {
+            font-weight: 700;
+            color: #2e7d32;
+            font-size: 1.1rem;
+        }
+        .reading-unit {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .record-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .stat-box .label {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #2e7d32;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .print-only {
+            display: none;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .record-card {
+                page-break-inside: avoid;
+                border: 1px solid #ccc;
+            }
+            .container {
+                max-width: 100%;
+            }
+            .records-section {
+                box-shadow: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+            .record-readings {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 تسجيل قراءات السكر</h1>
+            <p>تسجيل يومي لقراءات السكر بعد الأكل بساعتين - 3 مرات يومياً</p>
+        </div>
+
+        <div class="stats-bar no-print">
+            <div class="stat-box">
+                <div class="number" id="totalDays">0</div>
+                <div class="label">أيام مسجلة</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="totalReadings">0</div>
+                <div class="label">إجمالي القراءات</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="avgReading">-</div>
+                <div class="label">متوسط القراءات</div>
+            </div>
+        </div>
+
+        <div class="form-card no-print">
+            <h2>➕ إضافة قراءة جديدة</h2>
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="date">📅 التاريخ</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="input-group">
+                    <label for="breakfast">🌅 بعد الفطار (بساعتين)</label>
+                    <input type="number" id="breakfast" placeholder="مثال: 120" min="50" max="600" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="lunch">☀️ بعد الغداء (بساعتين)</label>
+                    <input type="number" id="lunch" placeholder="مثال: 140" min="50" max="600" step="1">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="dinner">🌙 بعد العشاء (بساعتين)</label>
+                    <input type="number" id="dinner" placeholder="مثال: 130" min="50" max="600" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="notes">📝 ملاحظات (اختياري)</label>
+                    <input type="text" id="notes" placeholder="أي ملاحظات إضافية">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="addRecord()">
+                    💾 حفظ القراءة
+                </button>
+                <button class="btn btn-secondary" onclick="clearForm()">
+                    🔄 تفريغ
+                </button>
+            </div>
+        </div>
+
+        <div class="records-section">
+            <h2>📊 سجل القراءات</h2>
+            <div id="recordsList">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <p>لا توجد قراءات مسجلة بعد</p>
+                    <p style="font-size: 0.85rem; margin-top: 5px;">ابدأ بإضافة أول قراءة من الأعلى</p>
+                </div>
+            </div>
+            <div class="btn-group no-print" style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="printRecords()">
+                    🖨️ طباعة / حفظ PDF
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    📥 تصدير البيانات
+                </button>
+                <button class="btn btn-danger" onclick="clearAll()">
+                    🗑️ مسح الكل
+                </button>
+            </div>
+        </div>
+
+        <div class="print-only" style="margin-top: 30px; text-align: center; color: #666;">
+            <hr style="border: none; border-top: 1px solid #ccc; margin-bottom: 15px;">
+            <p><strong>تقرير قراءات السكر</strong></p>
+            <p>تم إنشاؤه بتاريخ: <span id="printDate"></span></p>
+            <p style="font-size: 0.85rem; margin-top: 10px;">ملاحظة: القراءات بعد الأكل بساعتين - الطبيعي أقل من 180 mg/dL</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let records = JSON.parse(localStorage.getItem('sugarRecords')) || [];
+
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+        document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function addRecord() {
+            const date = document.getElementById('date').value;
+            const breakfast = document.getElementById('breakfast').value;
+            const lunch = document.getElementById('lunch').value;
+            const dinner = document.getElementById('dinner').value;
+            const notes = document.getElementById('notes').value;
+
+            if (!date) {
+                showToast('⚠️ يرجى اختيار التاريخ');
+                return;
+            }
+
+            if (!breakfast && !lunch && !dinner) {
+                showToast('⚠️ يرجى إدخال قراءة واحدة على الأقل');
+                return;
+            }
+
+            const existingIndex = records.findIndex(r => r.date === date);
+            const newRecord = {
+                date,
+                breakfast: breakfast || '',
+                lunch: lunch || '',
+                dinner: dinner || '',
+                notes: notes || ''
+            };
+
+            if (existingIndex >= 0) {
+                records[existingIndex] = newRecord;
+                showToast('✅ تم تحديث قراءة ' + formatDate(date));
+            } else {
+                records.push(newRecord);
+                records.sort((a, b) => new Date(b.date) - new Date(a.date));
+                showToast('✅ تم حفظ القراءة بنجاح');
+            }
+
+            saveRecords();
+            renderRecords();
+            clearForm();
+        }
+
+        function deleteRecord(date) {
+            if (confirm('هل أنت متأكد من حذف قراءة ' + formatDate(date) + '؟')) {
+                records = records.filter(r => r.date !== date);
+                saveRecords();
+                renderRecords();
+                showToast('🗑️ تم الحذف');
+            }
+        }
+
+        function editRecord(date) {
+            const record = records.find(r => r.date === date);
+            if (record) {
+                document.getElementById('date').value = record.date;
+                document.getElementById('breakfast').value = record.breakfast;
+                document.getElementById('lunch').value = record.lunch;
+                document.getElementById('dinner').value = record.dinner;
+                document.getElementById('notes').value = record.notes;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                showToast('✏️ جاري تعديل قراءة ' + formatDate(date));
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('breakfast').value = '';
+            document.getElementById('lunch').value = '';
+            document.getElementById('dinner').value = '';
+            document.getElementById('notes').value = '';
+        }
+
+        function clearAll() {
+            if (records.length === 0) {
+                showToast('لا توجد بيانات لمسحها');
+                return;
+            }
+            if (confirm('هل أنت متأكد من مسح جميع القراءات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                records = [];
+                saveRecords();
+                renderRecords();
+                showToast('🗑️ تم مسح جميع البيانات');
+            }
+        }
+
+        function saveRecords() {
+            localStorage.setItem('sugarRecords', JSON.stringify(records));
+            updateStats();
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('ar-EG', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            });
+        }
+
+        function getReadingColor(value) {
+            const num = parseFloat(value);
+            if (!num) return '#444';
+            if (num < 140) return '#2e7d32'; // good
+            if (num < 180) return '#f57c00'; // caution
+            return '#c62828'; // high
+        }
+
+        function renderRecords() {
+            const list = document.getElementById('recordsList');
+
+            if (records.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <p>لا توجد قراءات مسجلة بعد</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">ابدأ بإضافة أول قراءة من الأعلى</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = records.map(record => {
+                const bfColor = getReadingColor(record.breakfast);
+                const lnColor = getReadingColor(record.lunch);
+                const dnColor = getReadingColor(record.dinner);
+
+                return `
+                    <div class="record-card">
+                        <div class="record-info">
+                            <div class="record-date">📅 ${formatDate(record.date)}</div>
+                            <div class="record-readings">
+                                ${record.breakfast ? `<div class="reading">🌅 <span class="reading-value" style="color:${bfColor}">${record.breakfast}</span> <span class="reading-unit">mg/dL</span> (بعد الفطار)</div>` : ''}
+                                ${record.lunch ? `<div class="reading">☀️ <span class="reading-value" style="color:${lnColor}">${record.lunch}</span> <span class="reading-unit">mg/dL</span> (بعد الغداء)</div>` : ''}
+                                ${record.dinner ? `<div class="reading">🌙 <span class="reading-value" style="color:${dnColor}">${record.dinner}</span> <span class="reading-unit">mg/dL</span> (بعد العشاء)</div>` : ''}
+                                ${record.notes ? `<div class="reading" style="color:#888; font-size:0.85rem;">📝 ${record.notes}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="record-actions no-print">
+                            <button class="btn btn-secondary btn-small" onclick="editRecord('${record.date}')">✏️ تعديل</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteRecord('${record.date}')">🗑️ حذف</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalDays').textContent = records.length;
+
+            let totalReadings = 0;
+            let sum = 0;
+            records.forEach(r => {
+                if (r.breakfast) { totalReadings++; sum += parseFloat(r.breakfast); }
+                if (r.lunch) { totalReadings++; sum += parseFloat(r.lunch); }
+                if (r.dinner) { totalReadings++; sum += parseFloat(r.dinner); }
+            });
+
+            document.getElementById('totalReadings').textContent = totalReadings;
+            document.getElementById('avgReading').textContent = totalReadings > 0 ? Math.round(sum / totalReadings) : '-';
+        }
+
+        function printRecords() {
+            window.print();
+        }
+
+        function exportData() {
+            if (records.length === 0) {
+                showToast('لا توجد بيانات للتصدير');
+                return;
+            }
+
+            let csv = 'التاريخ,بعد الفطار,بعد الغداء,بعد العشاء,ملاحظات\n';
+            records.forEach(r => {
+                csv += `${r.date},${r.breakfast || ''},${r.lunch || ''},${r.dinner || ''},"${r.notes || ''}"\n`;
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'قراءات_السكر_' + new Date().toISOString().split('T')[0] + '.csv';
+            link.click();
+            showToast('📥 تم تصدير البيانات');
+        }
+
+        // Initialize
+        renderRecords();
+        updateStats();
+    </script>
+</body>
+</html>
